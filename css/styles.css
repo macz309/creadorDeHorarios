@@ -2,19 +2,27 @@
     text-align: center;
 }
 
-.control,.miniatura-col{
+button{
+    margin: 0px 10px;
+    border: none;
+    border-radius: 20px;
+    background-color:#3262cd ;
+    color: white;
+}
+
+.control{
     display: -webkit-flex;
     align-content: space-between;
 }
 
-.header-Horario, .materias, .header-miniatura{
+.header-Horario, .materias{
     display: flex;
     justify-items: center;
 }
 
 .horas, .hora{
     width: 100px;
-    height: auto;
+    height: 20px;
     padding: auto;
     font-size: 17px;
 }
@@ -22,18 +30,35 @@
     width: 200px;
 }
 
-.extras button
+.extras,#horarios{
+    margin: auto;
+    padding: 10px 25px;
+    padding-bottom: 50px;
+    border-radius: 10%;
+    border: 5px solid #3285cd;
+    box-shadow: 11px 10px 23px 0px rgba(0,0,0,0.75);
+
+}
+
+.agregar
 {
+    padding: 15px;
+    font-size: large;
     margin-top: 20px;
 }
 
 .notacion{
     display:flex;
     justify-content: center;
-    align-items: center;
+    align-content: center;
     margin: 10px auto;
 }
 
+.notacion-texto{
+    width: 200px;
+    padding: 0px 0px;
+    font-size: 23px;
+}
 
 
 /*
