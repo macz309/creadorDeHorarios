@@ -2,75 +2,84 @@
 //Variables Globales.
 var numHorarios=0
 var numNotacion=0;
-crearHorario()
 
 
-//Creando horario.
-function crearHorario(){
-    let horario=`<div class="horario" id="h${numHorarios}">
-                    <div class="header-Horario">
-                        <p class="horas">Hora</p>
-                        <p class="dia">Lunes</p>
-                        <p class="dia">Martes</p>
-                        <p class="dia">Miércoles</p>
-                        <p class="dia">Jueves</p>
-                        <p class="dia">Viernes</p>
-                        <p class="dia">Sábado</p>
-                    </div>`;
-    //Obtenemos la referencia a donde se colocara nuestro nuevo horario.
+//Correr al iniciar.
+desplegarHorario()
+
+
+
+//-------------------FUNCIONES--------------------------\\
+//Creando y desplegando horario.
+function desplegarHorario(){
+    const dias=["Lunes","Martes","Miércoles","Jueves", "Viernes", "Sábado"]
     let horarios = document.getElementById("horarios");
-    //Aumentamos el numero de horario existente. 
-    for (let r = 7; r < 22; r++) {
-        horario+= `<div class="materias">
-                    <p class="hora">${r}:00 - ${r+1}:00</p>`;
-        for (let c = 0; c < 6; c++) {
-            horario+=`<input class="materia" id="${numHorarios}${r}${c}" autocomplete="off"
-                        onkeyup="actualizarColorEscribiendo(this)" > `;           
-        }
-        horario+= `</div>`
-    }                    
-        horario += `</div>`
-    horarios.innerHTML = horario;
-    let materias=document.getElementsByClassName("materia")
     
-    for (let i = 0; i < materias.length; i++) {
-        const element = materias [i];
-        element.style.background="#ffffff";
+    //Creando cabecera del horario.
+    let headerHorario = document.createElement("div");
+    headerHorario.className="header-Horario"
+    //Agregando Hora a la cabecera.
+    let hora=document.createElement("p");
+    hora.className="horas";
+    hora.innerHTML="Hora";
+    headerHorario.appendChild(hora);
+    //Agregando los dias en la cabecera.
+    for (let i = 0; i < dias.length; i++) {
+        const element = document.createElement("p");
+        element.className="dia";
+        element.innerHTML=dias[i]
+        headerHorario.appendChild(element);
     }
+    horarios.appendChild(headerHorario);
+
+    //Creando cuerpo del horario.
+    for (let r = 7; r < 22; r++) {
+        let renglon=document.createElement("div");
+        renglon.className="materias";
+        //Creando horas laterales.
+        let horas=document.createElement("p");
+        horas.className="horas";
+        horas.innerHTML=`${r}:00 - ${r+1}:00</p>`;
+        renglon.appendChild(horas);
+        //Creando todas las celdas.
+        for (let c = 0; c < 6; c++) {
+            let columna=document.createElement("input");
+            columna.id=`${r}${c}`;
+            columna.className="materias";
+            columna.autocomplete="off";
+            columna.addEventListener("keyup", function(){ actualizarColorEscribiendo(this); });
+            columna.style.background="#ffffff";
+            renglon.appendChild(columna);
+        }
+        horarios.appendChild(renglon);
+    } 
 }
 
 //Creacion de una notacion.
 function agregarNotacion(){
     numNotacion++;
     let notaciones=document.getElementById("notaciones");
-
+    //Creando notación nueva
     let notacion=document.createElement("div");
-    notacion.id=notacion;
-
+    notacion.id="notacion";
+    //Creando notaciónN
     let notacionN=document.createElement("div");
     notacionN.classname="notacion";
     notacionN.id="notacion"+numNotacion;
-
+    //Agregando Selector de color
     let nc=document.createElement("input");
     nc.type="color";
     nc.value=colorAleatorio();
     nc.id="nc"+numNotacion;
     nc.addEventListener("change", function(){ actualizarColorBoton(this.id); })
     notacionN.appendChild(nc);
-
+    //Agregando Entrada de Texto
     let nt=document.createElement("input");
     nt.className="notacion-texto"
     nt.type="text";
     nt.id="nt"+numNotacion;
     nt.addEventListener("keyup", function(){ actualizarColorBoton(this.id); })
     notacionN.appendChild(nt);
-
-    let nb=document.createElement("button");
-    nb.addEventListener("click", function(){ actualizarColorBoton(this.id); })
-    nb.id="nb"+numNotacion;
-    nb.innerHTML="Actualizar";
-    //notacionN.appendChild(nb);
-
     notacion.appendChild(notacionN);
     notaciones.appendChild(notacion);
 }
@@ -82,7 +91,7 @@ function actualizarColorBoton(idInput){
     let id=idInput.substring(2); 
     for (let r = 7; r < 22; r++) {
         for (let c = 0; c < 6; c++) {
-            let idCelda =`${numHorarios}${r}${c}`;
+            let idCelda =`${r}${c}`;
             let celda= document.getElementById(idCelda);
             if(compararCelda(celda,id,0)==true){
                 return;
@@ -90,7 +99,6 @@ function actualizarColorBoton(idInput){
         }
     }             
 }
-
 
 //Actualizacion de Color escribiendo en las celdas.
 function actualizarColorEscribiendo(celda){ 
@@ -101,8 +109,6 @@ function actualizarColorEscribiendo(celda){
         console.log(i)
     }
 }
-
-
 
 //Compara las celdas mediante su contenido y cambia el color de las celdas.
 function compararCelda(celda,id,tipo){
@@ -115,6 +121,7 @@ function compararCelda(celda,id,tipo){
     let array= materia.split("");
     let array2=valor.split("");
     let cadenaIgual=true;
+    //Actualizando/Manteniedno Color
     if(array.length>0){
         for (let i = 0; i < array.length; i++) {
             const element = array [i];
@@ -123,7 +130,6 @@ function compararCelda(celda,id,tipo){
                 cadenaIgual=false;
             }
         }
-
         if(cadenaIgual==true){
             celda.style.background=color;
             return true;
@@ -132,7 +138,6 @@ function compararCelda(celda,id,tipo){
                 celda.style.background= "#ffffff";
             }
             return false;
-
         }
     }else if(tipo==0){
         if(celda.style.backgroundColor==colorRGB){
@@ -158,6 +163,7 @@ function hexToRgb(hex) {
     aleat = Math.floor(aleat)
     return parseInt(inferior) + aleat
  }
+
 //Funcion para generar colores aleatorios
   function colorAleatorio(){
     hexadecimal = new Array("0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F")

@@ -10,7 +10,7 @@ button{
     color: white;
 }
 
-.control{
+.control-Horario{
     display: -webkit-flex;
     align-content: space-between;
 }
@@ -60,21 +60,6 @@ button{
     font-size: 23px;
 }
 
-
-/*
-#miniatura{
-    margin-left: 20px;
-}
-.dia-mini{
-    margin: auto 25px;
-}
-.hora-mini{
-    font-size: 15px;
-}
-.cuadroColor{
-    margin: 5px 5px;
-}
-*/
 
 /*Quitando bordes al input de color*/
 input[type="color"] {
