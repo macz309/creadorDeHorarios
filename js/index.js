@@ -2,14 +2,33 @@
 //Variables Globales.
 var numHorarios=0
 var numNotacion=0;
+var horarioActual="Inicial"
+var contenidoHorario=iniciarContenido();
+var horariosCreados=document.getElementById("horariosCreados");
+var notacionesCreadas=new Array();
 
 
 //Correr al iniciar.
 desplegarHorario()
-
+cargandoHorarioInicial()
 
 
 //-------------------FUNCIONES--------------------------\\
+//Crea un arreglo vacio equivalente a las celdas disponibles del horario.
+function iniciarContenido(){
+    let contenido=[]
+    for (let r = 7; r < 22; r++) {
+        let temp=[]
+        for (let c = 0; c < 6; c++) {
+            temp.push("");
+        }
+        contenido.push(temp)
+    }
+    return contenido;
+}
+
+
+
 //Creando y desplegando horario.
 function desplegarHorario(){
     const dias=["Lunes","Martes","Miércoles","Jueves", "Viernes", "Sábado"]
@@ -55,6 +74,26 @@ function desplegarHorario(){
     } 
 }
 
+//Cargando informacio inicial del LocalStorage
+function cargandoHorarioInicial(){
+    if(localStorage.getItem("Inicial")){
+        console.log("Existe el inicial.");
+    }else{
+        console.log("No existe el inicial.");
+        //localStorage.setItem(horarioActual,contenidoHorario)
+        let horarioCreado=document.createElement("option");
+        horarioCreado.innerHTML="Inicial"
+        horariosCreados.appendChild(horarioCreado);
+    }
+    console.log(localStorage.length)
+    //Despliega el nombre del horario actual.
+    let actual= document.getElementById("horarioActual");
+    actual.value=horarioActual;
+}
+
+
+
+
 //Creacion de una notacion.
 function agregarNotacion(){
     numNotacion++;
@@ -69,26 +108,34 @@ function agregarNotacion(){
     //Agregando Selector de color
     let nc=document.createElement("input");
     nc.type="color";
-    nc.value=colorAleatorio();
+    let color=colorAleatorio();
+    nc.value=color;
     nc.id="nc"+numNotacion;
-    nc.addEventListener("change", function(){ actualizarColorBoton(this.id); })
+    nc.addEventListener("change", function(){ actualizarColorNotacion(this); })
     notacionN.appendChild(nc);
     //Agregando Entrada de Texto
     let nt=document.createElement("input");
     nt.className="notacion-texto"
     nt.type="text";
     nt.id="nt"+numNotacion;
-    nt.addEventListener("keyup", function(){ actualizarColorBoton(this.id); })
+    nt.addEventListener("keyup", function(){ actualizarColorNotacion(this); })
     notacionN.appendChild(nt);
     notacion.appendChild(notacionN);
     notaciones.appendChild(notacion);
+    //Creando objeto nuevaNotacion
+    let nuevaNotacion={
+        color:color,
+        texto:""
+    }
+    //Almacenando nuevaNotacion en las notaciones creadas.
+    notacionesCreadas.push(nuevaNotacion);
+    console.log(notacionesCreadas.length);
 }
 
 
 //Actualziacion de Color con Boton Actualizar de notaciones
-function actualizarColorBoton(idInput){
-    console.log(idInput)
-    let id=idInput.substring(2); 
+function actualizarColorNotacion(input){
+    let id=input.id.substring(2); 
     for (let r = 7; r < 22; r++) {
         for (let c = 0; c < 6; c++) {
             let idCelda =`${r}${c}`;
@@ -97,7 +144,14 @@ function actualizarColorBoton(idInput){
                 return;
             }
         }
-    }             
+    }
+    //Actualizacion de datos almacenados en notacionesCreadas.
+    if(input.type=="color"){
+        notacionesCreadas[id-1].color=input.value;
+    }else{
+        notacionesCreadas[id-1].texto=input.value;
+    }
+    console.log(notacionesCreadas);
 }
 
 //Actualizacion de Color escribiendo en las celdas.
@@ -106,8 +160,22 @@ function actualizarColorEscribiendo(celda){
         if(compararCelda(celda,i,1)==true){
             return;
         };
-        console.log(i)
     }
+    actualizarContenidoHorario(celda.id,celda.value);
+}
+
+//Actualizar contenidoHorario
+function actualizarContenidoHorario(id,value){
+    let r2=0
+    let c2=0
+    if(id.length>2){
+        r2= parseInt(id.substring(0,2));
+        c2= parseInt(id.substring(2));
+    }else{
+        r2= parseInt(id.substring(0,1));
+        c2= parseInt(id.substring(1));
+    }
+    contenidoHorario[r2-7][c2]=value;
 }
 
 //Compara las celdas mediante su contenido y cambia el color de las celdas.
