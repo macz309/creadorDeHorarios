@@ -15,15 +15,15 @@
             <select id="horariosCreados">
                 
             </select>
-            <button>Cargar</button>
+            <button onclick="cargarHorario()">Cargar</button>
         </div>
         <div class="crearHorario">
-            <input type="text">
-            <button> Crear </button>
+            <input type="text" id="nombreNuevo" autocomplete="off" autocapitalize="sentences">
+            <button onclick="crearNuevoHorario()"> Crear </button>
         </div>
         <div class="guardarHorario">
             <input type="text" id="horarioActual" readonly=true>
-            <button> Guardar </button>
+            <button onclick="guardarHorario()"> Guardar </button>
         </div>
     </div>
     <div class="control-Horario">
